@@ -9,15 +9,17 @@ import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
 
 class Layout extends Component {
-    state = {showSideDrawer:true}
+    state = {showSideDrawer:false}
     
     sideDrwerShowHandler = () => {    
-        this.setState({showSideDrawer:false})
+        this.setState((prevState)=>{
+            return {showSideDrawer:!prevState.showSideDrawer}
+        })
     }
     
     render (){
         return <Aux>
-            <Toolbar />
+            <Toolbar  sideDrwerhandler={this.sideDrwerShowHandler} />
             <SideDrawer show={this.state.showSideDrawer} 
                         sideDrwerhandler = {this.sideDrwerShowHandler} />
             <main className={classes.Content}>

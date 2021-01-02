@@ -16,6 +16,7 @@ const sideDrawer = (props) => {
         <Aux>
             <Backdrop show={props.show} 
                       puchaseCancel={props.sideDrwerhandler} />
+            
             <div className={attechmentClasses.join(' ')}>
                 <div className={classes.Logo}>
                     <Logo />
