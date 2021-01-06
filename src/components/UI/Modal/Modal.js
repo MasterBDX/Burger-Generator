@@ -5,15 +5,15 @@ import Aux from '../../../hoc/Auxiliary/Aux'
 
 class Modal extends Component {
     shouldComponentUpdate(nextProps,nextState){
-        return nextProps.show !== this.props.show
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children ;
     }
     componentDidUpdate(){
-        console.log('Model will Update')
+       
     }
     render(){
         return (
             <Aux>
-                <Backdrop puchaseCancel={this.props.puchaseCancel} show={this.props.show} />
+                <Backdrop modalClose={this.props.modalClose} show={this.props.show} />
                 <div className={classes.Modal}
                     style={
                             {
