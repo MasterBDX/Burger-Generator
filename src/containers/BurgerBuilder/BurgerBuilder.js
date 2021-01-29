@@ -94,7 +94,13 @@ class BurgerBuilder extends Component {
         //         loading:false,
         //         purchasing:false })
         // })
-        this.props.history.push('/checkout')
+        let ingredientsQuery = []
+        for(let q in this.state.ingredients ){
+            const query = `${encodeURIComponent(q)}=${encodeURIComponent(this.state.ingredients[q])}`
+            ingredientsQuery.push(query)
+        }
+        this.props.history.push({pathname:'/checkout',
+        search:ingredientsQuery.join('&')})
         
     }
 

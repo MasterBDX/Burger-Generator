@@ -3,9 +3,12 @@ import classes from './Burger.module.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
+    console.log(props.ingredients,"hahah")
     let formatedIngredients = Object.keys(props.ingredients)
+   
     .map(ingKey => {
-        return [...Array(props.ingredients[ingKey])].map(
+        const ingredNum = props.ingredients[ingKey]
+        return [...Array(ingredNum)].map(
                 (_,index) => (
                     <BurgerIngredient key={ingKey + index} type={ingKey} />
                             )
