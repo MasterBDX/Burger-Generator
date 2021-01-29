@@ -9,7 +9,7 @@ function App() {
     <div>
       <Layout>
         <Switch>
-          <Route path="checkout/" component={Checkout} />
+          <Route path="/checkout" component={Checkout} />
           <Route path="/" component={BurgerBuilder} />
         </Switch>
       </Layout>
