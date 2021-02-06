@@ -1,12 +1,12 @@
 import React from 'react';
-
+import {Link} from 'react-router-dom';
 import classes from './NavigationItem.module.css';
 
 const navigationItem = (props) => (
     <li className={classes.NavigationItem}>
-        <a href="www.google.com">
+        <Link to={props.path}>
           {props.children}
-        </a>
+        </Link>
     </li>
 );
 

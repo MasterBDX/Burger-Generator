@@ -23,6 +23,7 @@ class BurgerBuilder extends Component {
         totalPrice:0,
         purchasable:false,
         purchasing:false,
+       
         loading:false,
         error:null
     }
@@ -70,35 +71,12 @@ class BurgerBuilder extends Component {
         this.setState({purchasing : false})
     }
     purchaseContinueHandler = () => {
-        // this.setState({loading:true})
-        // const order = {ingredients:this.state.ingredients,
-        //                totalPrice:this.state.totalPrice,
-        //                custmor:{
-        //                    name:'MasterBDX',
-        //                    address:{
-        //                        street:'Test Street',
-        //                        zipCode:'12345',
-        //                        contry:'Libya'
-        //                    },
-        //                    email:'masterbdxteam@gmail.com',
-        //                    deliveryType:'Fastest'
-        //                }}
-        // axios.post('/orders.json',order)
-        // .then(response=>{
-        //     this.setState({
-        //         loading:false
-        //         ,purchasing:false})
-        //     })
-        // .catch(errors=>{
-        //     this.setState({
-        //         loading:false,
-        //         purchasing:false })
-        // })
         let ingredientsQuery = []
         for(let q in this.state.ingredients ){
             const query = `${encodeURIComponent(q)}=${encodeURIComponent(this.state.ingredients[q])}`
             ingredientsQuery.push(query)
         }
+        ingredientsQuery.push(`totalPrice=${this.state.totalPrice}`)
         this.props.history.push({pathname:'/checkout',
         search:ingredientsQuery.join('&')})
         
@@ -111,6 +89,14 @@ class BurgerBuilder extends Component {
         }else{
             this.setState({purchasable:false})
         }
+    }
+
+    getDefaultPrice = (ingredients)=>{
+            let price = 0
+            for (const key in ingredients ){
+                price += ingredients[key] * IngredientsPrices[key]
+            }
+            return price
     }
 
     render(){
@@ -166,7 +152,11 @@ class BurgerBuilder extends Component {
     }
     componentDidMount(){
         axios.get('/ingredients.json').then(response=>{
-            this.setState({ingredients:response.data})
+            const price = this.getDefaultPrice(response.data)
+            const purchasable = price > 0 ? true:false
+            this.setState({ingredients:response.data,
+                           totalPrice:price,
+                           purchasable:purchasable})
         }).catch(error=>{
             
            this.setState({error:error})
