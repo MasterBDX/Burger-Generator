@@ -4,12 +4,15 @@ import classes from './Order.module.css';
 
 const order = ()=>(
     <div className={classes.Order}>
-        <p>Ingredients:</p>
-        <p>Salad (3)</p>
-        <p>Meet (3)</p>
-        <p>Bacon (3)</p>
-        <p>Cheese</p>
-        <hr />
-        Price : 40$
+       
+        <p>Ingredients : Salad (2),
+                         Meet (2),
+                         Bacon (1),
+                         Cheese(2)
+        </p>
+       <br />
+        Prices : 40$
     </div>
 )
+
+export default order;
