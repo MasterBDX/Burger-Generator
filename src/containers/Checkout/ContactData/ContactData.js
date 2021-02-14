@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import Button from '../../../components/UI/Button/Button';
-import classes from './ContactData.module.css';
-import Spinner from '../../../components/UI/Spinner/Spinner';
 import axios from '../../../axios/axios-orders';
+import classes from './ContactData.module.css';
+
+import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends Component {
     state = {
@@ -41,7 +43,7 @@ class ContactData extends Component {
                 this.setState({
                     loading: false
                 })
-                console.log(this.props)
+               
                 this.props.history.push('/')
             })
             .catch(errors => {
@@ -52,9 +54,12 @@ class ContactData extends Component {
     }
     render() {
         let form = (<form>
-                        <input type="text" name="Full Name" placeholder="Fullname" />
-                        <input type="text" name="Email" placeholder="Email" />
-                        <input type="text" name="Address" placeholder="Address" />
+                        <Input inputtype="input" name="Full Name" placeholder="Fullname" />
+                        <Input inputtype="input" name="Email" placeholder="Email" />
+                        <Input inputtype="input" name="Address" placeholder="Address" />
+                        <Input inputtype="input" name="zipcode" placeholder="ZIP Code" />
+                        <Input inputtype="textarea" name="description" placeholder="Description" />
+                        
                         <Button btnType="Success"
                             clicked={this.sendOrderHandler}
                         >
