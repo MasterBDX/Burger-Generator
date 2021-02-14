@@ -6,16 +6,40 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 
+const inputGenerator = (inputtype,config,value)=>{
+    return {
+        inputtype:inputtype,
+        config:config,
+        value:value
+    }
+}
+
 class ContactData extends Component {
     state = {
         contactData: {
-            email: "",
-            fullname: "",
-            address: {
-                city: "",
-                street: "",
-                zipcode: ""
-            }
+            email: inputGenerator('input',
+                                  {type:'email',placeholder:'Email Address'},
+                                ''),
+            fullname: inputGenerator('input',
+                        {type:'text',placeholder:'Fullname'},
+                        ''),
+            city: inputGenerator('input',
+                    {type:'text',placeholder:'City'},
+                    ''),
+            street: inputGenerator('input',
+                            {type:'text',placeholder:'Street'},
+                                ''),
+            zipcode: inputGenerator('input',
+                            {type:'text',placeholder:'ZIP Code'},
+                            ''),
+            deliveryType: inputGenerator('select',
+                    {options:[ 
+                                {value:'fastest',displayValue:'Fastest'},
+                                {value:'cheapest',displayValue:'Cheapest'}
+                            ]
+                    },
+                    ''),
+            
         },
         ingredients: null,
         loading: false
@@ -53,16 +77,16 @@ class ContactData extends Component {
             })
     }
     render() {
+        let inputs = []
+        for (let key in this.state.contactData){
+            const input = <Input key={key} 
+                                 inputData={this.state.contactData[key]}/>
+            inputs.push(input)
+        }   
         let form = (<form>
-                        <Input inputtype="input" name="Full Name" placeholder="Fullname" />
-                        <Input inputtype="input" name="Email" placeholder="Email" />
-                        <Input inputtype="input" name="Address" placeholder="Address" />
-                        <Input inputtype="input" name="zipcode" placeholder="ZIP Code" />
-                        <Input inputtype="textarea" name="description" placeholder="Description" />
-                        
+                        {inputs}
                         <Button btnType="Success"
-                            clicked={this.sendOrderHandler}
-                        >
+                                clicked={this.sendOrderHandler}>
                             Order
                         </Button>
                     </form>)
