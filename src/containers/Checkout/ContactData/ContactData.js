@@ -7,12 +7,17 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 
 const inputGenerator = (inputtype, config, validators, value) => {
+    let valid = false
+    if (inputtype ==='select'){
+        valid = true;
+    }
     return {
         inputtype: inputtype,
         config: config,
         value: value,
-        validators: validators
-
+        validators: validators,
+        valid:valid,
+        touched:false
     }
 }
 
@@ -21,23 +26,29 @@ class ContactData extends Component {
         contactData: {
             email: inputGenerator('input',
                 { type: 'email', placeholder: 'Email Address' },
-                { required: true },
+                { required: true, 
+                  minLength:8
+                },
                 ''),
             fullname: inputGenerator('input',
                 { type: 'text', placeholder: 'Fullname' },
-                { required: true },
+                { required: true, 
+                    minLength:8 },
                 ''),
             city: inputGenerator('input',
                 { type: 'text', placeholder: 'City' },
-                { required: true },
+                { required: true, 
+                    minLength:8 },
                 ''),
             street: inputGenerator('input',
                 { type: 'text', placeholder: 'Street' },
-                { required: true },
+                { required: true, 
+                    minLength:8 },
                 ''),
             zipcode: inputGenerator('input',
                 { type: 'text', placeholder: 'ZIP Code' },
-                { required: true },
+                { required: true, 
+                    minLength:5 },
                 ''),
             deliveryType: inputGenerator('select',
                 {
@@ -50,6 +61,7 @@ class ContactData extends Component {
                 'fastest'),
 
         },
+        formIsValid:false,
         ingredients: null,
         loading: false
     }
@@ -88,17 +100,22 @@ class ContactData extends Component {
         clonedDeepData.value = event.target.value;
         clonedDeepData.valid = this.checkValidity(event.target.value,
                                                   clonedDeepData.validators)
-
+        clonedDeepData.touched = true;
         clonedData[identifier] = clonedDeepData;
-        console.log(clonedDeepData)
-        this.setState({ contactData: clonedData });
-
+        let formIsValid = true;
+        for (let inputIdentifier in clonedData){
+            formIsValid = clonedData[inputIdentifier].valid && formIsValid
+        }
+        this.setState({ contactData: clonedData ,formIsValid:formIsValid});
     }
 
     checkValidity(value,rules){
-        let isValid = false
+        let isValid = true
         if (rules.required){
-            isValid = value !== '' ? true : false  
+            isValid = value !== '' && isValid;   
+        }
+        if (rules.minLength){
+            isValid = value.length >= rules.minLength && isValid
         }
         return isValid
     }
@@ -109,12 +126,17 @@ class ContactData extends Component {
             const input = <Input key={key}
                 identifier={key}
                 changed={this.inputChangeHandler}
+                invalid={!this.state.contactData[key].valid}
+                shouldValid = {this.state.contactData[key].validators}
+                touched={this.state.contactData[key].touched}
                 inputData={this.state.contactData[key]} />
             inputs.push(input)
         }
         let form = (<form onSubmit={this.sendOrderHandler}>
             {inputs}
-            <Button btnType="Success">
+            <Button btnType="Success"
+                    disabled={!this.state.formIsValid}
+            >
                 Order
                         </Button>
         </form>)
