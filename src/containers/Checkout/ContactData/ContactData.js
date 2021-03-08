@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from '../../../axios/axios-orders';
 import classes from './ContactData.module.css';
+import { connect } from 'react-redux';
+
+import {RESET_INGREDIENTS} from '../../../store/actions';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -8,7 +11,7 @@ import Input from '../../../components/UI/Input/Input';
 
 const inputGenerator = (inputtype, config, validators, value) => {
     let valid = false
-    if (inputtype ==='select'){
+    if (inputtype === 'select') {
         valid = true;
     }
     return {
@@ -16,8 +19,8 @@ const inputGenerator = (inputtype, config, validators, value) => {
         config: config,
         value: value,
         validators: validators,
-        valid:valid,
-        touched:false
+        valid: valid,
+        touched: false
     }
 }
 
@@ -26,29 +29,38 @@ class ContactData extends Component {
         contactData: {
             email: inputGenerator('input',
                 { type: 'email', placeholder: 'Email Address' },
-                { required: true, 
-                  minLength:8
+                {
+                    required: true,
+                    minLength: 8
                 },
                 ''),
             fullname: inputGenerator('input',
                 { type: 'text', placeholder: 'Fullname' },
-                { required: true, 
-                    minLength:8 },
+                {
+                    required: true,
+                    minLength: 8
+                },
                 ''),
             city: inputGenerator('input',
                 { type: 'text', placeholder: 'City' },
-                { required: true, 
-                    minLength:8 },
+                {
+                    required: true,
+                    minLength: 8
+                },
                 ''),
             street: inputGenerator('input',
                 { type: 'text', placeholder: 'Street' },
-                { required: true, 
-                    minLength:8 },
+                {
+                    required: true,
+                    minLength: 8
+                },
                 ''),
             zipcode: inputGenerator('input',
                 { type: 'text', placeholder: 'ZIP Code' },
-                { required: true, 
-                    minLength:5 },
+                {
+                    required: true,
+                    minLength: 5
+                },
                 ''),
             deliveryType: inputGenerator('select',
                 {
@@ -61,7 +73,7 @@ class ContactData extends Component {
                 'fastest'),
 
         },
-        formIsValid:false,
+        formIsValid: false,
         ingredients: null,
         loading: false
     }
@@ -76,7 +88,7 @@ class ContactData extends Component {
 
         const order = {
             ingredients: this.props.ingredients,
-            totalPrice: this.props.price,
+            totalPrice: this.props.totalPrice,
             customer: formData
         }
         axios.post('/orders.json', order)
@@ -84,7 +96,7 @@ class ContactData extends Component {
                 this.setState({
                     loading: false
                 })
-
+                this.props.resetIngredients()
                 this.props.history.push('/')
             })
             .catch(errors => {
@@ -99,22 +111,22 @@ class ContactData extends Component {
         const clonedDeepData = { ...clonedData[identifier] };
         clonedDeepData.value = event.target.value;
         clonedDeepData.valid = this.checkValidity(event.target.value,
-                                                  clonedDeepData.validators)
+            clonedDeepData.validators)
         clonedDeepData.touched = true;
         clonedData[identifier] = clonedDeepData;
         let formIsValid = true;
-        for (let inputIdentifier in clonedData){
+        for (let inputIdentifier in clonedData) {
             formIsValid = clonedData[inputIdentifier].valid && formIsValid
         }
-        this.setState({ contactData: clonedData ,formIsValid:formIsValid});
+        this.setState({ contactData: clonedData, formIsValid: formIsValid });
     }
 
-    checkValidity(value,rules){
+    checkValidity(value, rules) {
         let isValid = true
-        if (rules.required){
-            isValid = value !== '' && isValid;   
+        if (rules.required) {
+            isValid = value !== '' && isValid;
         }
-        if (rules.minLength){
+        if (rules.minLength) {
             isValid = value.length >= rules.minLength && isValid
         }
         return isValid
@@ -127,7 +139,7 @@ class ContactData extends Component {
                 identifier={key}
                 changed={this.inputChangeHandler}
                 invalid={!this.state.contactData[key].valid}
-                shouldValid = {this.state.contactData[key].validators}
+                shouldValid={this.state.contactData[key].validators}
                 touched={this.state.contactData[key].touched}
                 inputData={this.state.contactData[key]} />
             inputs.push(input)
@@ -135,7 +147,7 @@ class ContactData extends Component {
         let form = (<form onSubmit={this.sendOrderHandler}>
             {inputs}
             <Button btnType="Success"
-                    disabled={!this.state.formIsValid}
+                disabled={!this.state.formIsValid}
             >
                 Order
                         </Button>
@@ -155,5 +167,17 @@ class ContactData extends Component {
     }
 }
 
+const mapStateToProps =(state)=>{
+    return {
+        ingrediants:state.ingrediants,
+        totalPrice:state.totalPrice
+    }
+}
 
-export default ContactData
+const mapDispatchToProps = (dispatch)=>{
+    return {
+       resetIngredients : () => dispatch({type:RESET_INGREDIENTS})
+        }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ContactData)

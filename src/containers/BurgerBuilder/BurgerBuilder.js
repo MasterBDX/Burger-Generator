@@ -17,9 +17,7 @@ import withErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients:null,
         purchasing:false,
-       
         loading:false,
         error:null
     }
@@ -31,16 +29,9 @@ class BurgerBuilder extends Component {
     purchaseCancelHandler = () => {
         this.setState({purchasing : false})
     }
+    
     purchaseContinueHandler = () => {
-        let ingredientsQuery = []
-        for(let q in this.props.ingredients ){
-            const query = `${encodeURIComponent(q)}=${encodeURIComponent(this.props.ingredients[q])}`
-            ingredientsQuery.push(query)
-        }
-        ingredientsQuery.push(`totalPrice=${this.props.totalPrice}`)
-        this.props.history.push({pathname:'/checkout',
-        search:ingredientsQuery.join('&')})
-        
+        this.props.history.push('/checkout')
     }
 
     getDefaultPrice = (ingredients)=>{
@@ -104,8 +95,7 @@ class BurgerBuilder extends Component {
     }
     componentDidMount(){
         axios.get('/ingredients.json').then(response=>{
-            const price = this.getDefaultPrice(response.data)
-           
+            const price = this.getDefaultPrice(response.data)       
             this.setState({ingredients:response.data,
                            totalPrice:price,
                            })
@@ -114,7 +104,6 @@ class BurgerBuilder extends Component {
            this.setState({error:error})
         })
     }
-
 }
 
 const mapStateToProps = (state) =>{
