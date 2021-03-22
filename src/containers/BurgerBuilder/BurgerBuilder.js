@@ -1,5 +1,5 @@
 import  {connect} from 'react-redux';
-import * as actionsTypes from '../../store/actions';
+import * as actionsTypes from '../../store/actions/actionTypes';
 
 import React,{Component} from 'react';
 
