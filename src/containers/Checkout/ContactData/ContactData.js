@@ -3,11 +3,10 @@ import axios from '../../../axios/axios-orders';
 import classes from './ContactData.module.css';
 import { connect } from 'react-redux';
 
-import {RESET_INGREDIENTS} from '../../../store/actions/actionTypes';
-
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import * as orderActions from '../../../store/actions/order'; 
 
 const inputGenerator = (inputtype, config, validators, value) => {
     let valid = false
@@ -176,7 +175,7 @@ const mapStateToProps =(state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-       resetIngredients : () => dispatch({type:RESET_INGREDIENTS})
+       resetIngredients : () => dispatch(orderActions.resetIngredients())
         }
 }
 
