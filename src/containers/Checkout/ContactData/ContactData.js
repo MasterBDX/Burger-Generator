@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from '../../../axios/axios-orders';
 import classes from './ContactData.module.css';
 import { connect } from 'react-redux';
+import errorHandler from '../../../hoc/WithErrorHandler/WithErrorHandler';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -90,19 +91,7 @@ class ContactData extends Component {
             totalPrice: this.props.totalPrice,
             customer: formData
         }
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({
-                    loading: false
-                })
-                this.props.resetIngredients()
-                this.props.history.push('/')
-            })
-            .catch(errors => {
-                this.setState({
-                    loading: false,
-                })
-            })
+        this.props.startBurgerPurchase(order)
     }
 
     inputChangeHandler = (event, identifier) => {
@@ -175,8 +164,9 @@ const mapStateToProps =(state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
+       startBurgerPurchase : (orderData)=>{ dispatch(startBurgerPurchase(orderData))},
        resetIngredients : () => dispatch(orderActions.resetIngredients())
         }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(ContactData)
+export default connect(mapStateToProps,mapDispatchToProps)(errorHandler(ContactData,axios))
