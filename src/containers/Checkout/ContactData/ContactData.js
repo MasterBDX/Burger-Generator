@@ -7,7 +7,7 @@ import errorHandler from '../../../hoc/WithErrorHandler/WithErrorHandler';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
-import * as orderActions from '../../../store/actions/order'; 
+import * as orderActions from '../../../store/index';
 
 const inputGenerator = (inputtype, config, validators, value) => {
     let valid = false
@@ -85,13 +85,12 @@ class ContactData extends Component {
         for (let identifier in this.state.contactData) {
             formData[identifier] = this.state.contactData[identifier].value
         }
-
         const order = {
             ingredients: this.props.ingredients,
             totalPrice: this.props.totalPrice,
             customer: formData
         }
-        this.props.startBurgerPurchase(order)
+        this.props.burgerPurchase(order)
     }
 
     inputChangeHandler = (event, identifier) => {
@@ -140,7 +139,7 @@ class ContactData extends Component {
                 Order
                         </Button>
         </form>)
-        if (this.state.loading) {
+        if (this.props.loading) {
             form = <Spinner />
         }
         return (<div className={classes.ContactData}>
@@ -155,18 +154,20 @@ class ContactData extends Component {
     }
 }
 
-const mapStateToProps =(state)=>{
+const mapStateToProps = (state) => {
+
     return {
-        ingrediants:state.ingrediants,
-        totalPrice:state.totalPrice
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice,
+        loading: state.order.loading
     }
 }
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
     return {
-       startBurgerPurchase : (orderData)=>{ dispatch(startBurgerPurchase(orderData))},
-       resetIngredients : () => dispatch(orderActions.resetIngredients())
-        }
+        burgerPurchase: (orderData) => { dispatch(orderActions.burgerPurchase(orderData)) },
+        resetIngredients: () => dispatch(orderActions.resetIngredients())
+    }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(errorHandler(ContactData,axios))
+export default connect(mapStateToProps, mapDispatchToProps)(errorHandler(ContactData, axios))

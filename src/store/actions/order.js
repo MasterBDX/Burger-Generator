@@ -1,13 +1,14 @@
 import * as actionsTypes from './actionTypes';
+import axios from '../../axios/axios-orders';
 
-export  const resetIngredients = () =>{
+export  const resetIngredients = () => {
     return {type:actionsTypes.RESET_INGREDIENTS}
 }
 
 const purchaseBurgerSuccess = (id,orderData) =>{
     return {
         type:actionsTypes.PURCHASE_BURGER_SUCCESS,
-        id:id,
+        orderId:id,
         orderData:orderData
     }
 }
@@ -19,11 +20,18 @@ const purchaseBurgerFail = (error) =>{
     }
 }
 
-const startBurgerPurchase = (orderData) =>{
+export const startPurchaseBurger = () =>{
+    return {
+        type:actionsTypes.PURCHASE_BURGER_START
+    }
+}
+
+export const burgerPurchase = (orderData) =>{
     return (dispatch) =>{
+        dispatch(startPurchaseBurger())
         axios.post('/orders.json', orderData)
         .then(response => {
-            dispatch(purchaseBurgerSuccess(response.data,orderData))
+            dispatch(purchaseBurgerSuccess(response.data.name,orderData))
         })
         .catch(error => {
             dispatch(purchaseBurgerFail(error))
@@ -31,5 +39,8 @@ const startBurgerPurchase = (orderData) =>{
     }
 }
 
-
-
+export const initPurchaseBurger = () =>{
+    return {
+        type:actionsTypes.PURCHASE_BURGER_INIT
+    }
+}

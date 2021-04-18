@@ -8,21 +8,20 @@ class Orders extends Component{
              loading:true}
 
     componentDidMount(){
-            axios.get('/orders.json').then((response)=>{
-
-                let orders = []
-                const data = response.data
-                for (let key in response.data){
-                    orders.push({...data[key],
-                                id:key}
-                                 )
+            // axios.get('/orders.json').then((response)=>{
+            //     let orders = []
+            //     const data = response.data
+            //     for (let key in response.data){
+            //         orders.push({...data[key],
+            //                     id:key}
+            //                      )
                   
-                }
+            //     }
                 
-                this.setState({loading:false,orders:orders})
-            }).catch((error)=>{
-                this.setState({loading:false})
-            })
+            //     this.setState({loading:false,orders:orders})
+            // }).catch((error)=>{
+            //     this.setState({loading:false})
+            // })
     }
     
     render(){

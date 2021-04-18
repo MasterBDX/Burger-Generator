@@ -1,4 +1,10 @@
 export {addIngredient,
         removeIngredient,
-        initIngredients 
+        initIngredients, 
         } from './actions/burgerBuilder';
+
+export {startPurchaseBurger,
+        burgerPurchase ,
+        resetIngredients,
+        initPurchaseBurger
+        } from './actions/order';

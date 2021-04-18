@@ -1,6 +1,0 @@
-
-cort * as actionsTypes from './actionTypes';
-
-export  const resetIngredients = () =>{
-    return {type:RESET_INGREDIENTS}
-}
