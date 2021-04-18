@@ -11,7 +11,7 @@ const order = (props)=>{
     <div className={classes.Order}>
        
         <p>Ingredients : {ingredients.map((i)=>{
-            return (<span  style={{
+            return (<span  key={props.key} style={{
                             textTransform: 'capitalize',
                             display: 'inline-block',
                             margin: '0 8px',

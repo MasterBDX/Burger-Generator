@@ -44,3 +44,48 @@ export const initPurchaseBurger = () =>{
         type:actionsTypes.PURCHASE_BURGER_INIT
     }
 }
+
+
+export const ordersFetchStart = ()=>{
+    return {
+        type:actionsTypes.ORDERS_FETCH_START
+    }
+}
+
+
+export const ordersFetchSuccess = (orders)=>{
+    return {
+        type:actionsTypes.ORDERS_FETCH_SUCCESS,
+        orders:orders
+    }
+}
+
+
+export const ordersFetchFail = (error)=>{
+    return {
+        type:actionsTypes.ORDERS_FETCH_FAIL,
+        error:error
+    }
+}
+
+
+export const ordersFetch = ()=>{
+    return dispatch =>{
+        dispatch(ordersFetchStart());
+        axios.get('/orders.json').then((response)=>{
+            let orders = []
+            const data = response.data
+            for (let key in response.data){
+                orders.push({...data[key],
+                            id:key}
+                             )
+              
+            }
+            
+            dispatch(ordersFetchSuccess(orders))
+
+        }).catch((error)=>{
+            dispatch(ordersFetchFail(error))
+        })
+    }
+}

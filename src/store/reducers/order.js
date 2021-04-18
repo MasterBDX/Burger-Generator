@@ -9,9 +9,9 @@ const initialState = {
 
 const reducer = (state=initialState, action) =>{
     const newOrder = {id:action.orderId,...action.orderData}
+
     switch (action.type){
         case actionTypes.PURCHASE_BURGER_INIT:
-            console.log('im in')
             return {
                 ...state,
                 purchased:false
@@ -39,6 +39,19 @@ const reducer = (state=initialState, action) =>{
                 ...state,
                 loading:true
             }
+        case actionTypes.ORDERS_FETCH_SUCCESS:
+            return {
+                ...state,
+                orders:action.orders,
+                loading:false
+            }
+
+        case actionTypes.ORDERS_FETCH_FAIL:
+            return {
+                ...state,
+                loading:false
+            }        
+
         default :
             return state 
     }

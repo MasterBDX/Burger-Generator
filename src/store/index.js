@@ -6,5 +6,6 @@ export {addIngredient,
 export {startPurchaseBurger,
         burgerPurchase ,
         resetIngredients,
-        initPurchaseBurger
+        initPurchaseBurger,
+        ordersFetch
         } from './actions/order';
