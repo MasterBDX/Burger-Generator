@@ -9,3 +9,5 @@ export {startPurchaseBurger,
         initPurchaseBurger,
         ordersFetch
         } from './actions/order';
+
+export {login} from './actions/auth';

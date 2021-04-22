@@ -4,6 +4,9 @@ import Button from '../../UI/Button/Button';
 import Spinner from '../../UI/Spinner/Spinner';
 import Input from '../../UI/Input/Input';
 import classes from './Login.module.css';
+import {connect} from 'react-redux';
+
+import * as actionsCreators from '../../../store/index';
 
 const inputGenerator = (inputtype, config, validators, value) => {
     let valid = false
@@ -43,6 +46,9 @@ class Login extends React.Component{
     
     sendReuqestHandler = (event) => {
         event.preventDefault();
+        const email = this.state.dataControls.email.value;
+        const password = this.state.dataControls.password.value;
+        this.props.loginCallBack(email,password)
         
     }
 
@@ -88,7 +94,7 @@ class Login extends React.Component{
             {inputs}
             <Button btnType="Success"
                 disabled={!this.state.formIsValid} >
-                submit
+                Login
             </Button>
         </form>)
 
@@ -105,5 +111,11 @@ class Login extends React.Component{
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        loginCallBack: (email,password) => dispatch(actionsCreators.login(email,password))
+    }
+}
 
-export default Login
+
+export default connect(null,mapDispatchToProps)(Login)
