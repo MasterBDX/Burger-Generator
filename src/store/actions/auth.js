@@ -2,45 +2,50 @@ import * as actionsTypes from './actionTypes';
 
 import axios from 'axios';
 
-const loginStart = ()=>{
-    console.log('iam starting')
+const authStart = ()=>{
     return {
-        type:actionsTypes.LOGIN_START
+        type:actionsTypes.AUTH_START
     };
 }
 
-const loginSuccess = (loginData) =>{
+const authSuccess = (idToken,localId) =>{
     return {
-        type:actionsTypes.LOGIN_SUCCESS,
-        loginData:loginData
+        type:actionsTypes.AUTH_SUCCESS,
+        idToken:idToken,
+        localId:localId,
+        
     }
 }
 
-const loginFail = (error)=>{
+const authFail = (error)=>{
     return {
-        type:actionsTypes.LOGIN_FAIL,
+        type:actionsTypes.AUTH_FAIL,
         error:error
     }
     
 }
 
-export const login = (email,password)=>{
+export const auth = (email,password,isSignUp)=>{
+    console.log(isSignUp)
     return dispatch =>{
-        dispatch(loginStart)
+        dispatch(authStart)
         const data  = {
             email:email,
             password:password,
             returnSecureToken:true
          }
-        console.log(data)
-        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBPC7rko3GMmlU72t3cTrgXl6SymC2U9GI',
-                   data).then(data => {
-                        console.log(data)
-                        dispatch(loginSuccess)
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBPC7rko3GMmlU72t3cTrgXl6SymC2U9GI';
+        
+        if (isSignUp){
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBPC7rko3GMmlU72t3cTrgXl6SymC2U9GI'
+        }
+        axios.post(url,
+                   data).then(res => {
+                        dispatch(authSuccess(res.data.idToken,res.data.localId))
                     }
                 ).catch(err =>{
                     console.log(err)
-                    dispatch(loginFail)
+                    dispatch(authFail)
                 })
     }
 }

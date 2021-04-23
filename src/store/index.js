@@ -10,4 +10,4 @@ export {startPurchaseBurger,
         ordersFetch
         } from './actions/order';
 
-export {login} from './actions/auth';
+export {auth} from './actions/auth';
