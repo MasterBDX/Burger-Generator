@@ -5,7 +5,8 @@ import updateObject from '../utility';
 const initialState = {
     loading:false,
     idToken:null,
-    localId:null
+    localId:null,
+    error:null
 }
 
 const authStart = (state,action) =>{

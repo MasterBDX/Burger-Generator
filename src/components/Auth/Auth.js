@@ -6,6 +6,7 @@ import Input from '../UI/Input/Input';
 import classes from './Auth.module.css';
 import { connect } from 'react-redux';
 
+
 import * as actionsCreators from '../../store/index';
 
 const inputGenerator = (inputtype, config, validators, value) => {
@@ -93,7 +94,6 @@ class Auth extends React.Component {
     }
 
     render() {
-        console.log(this.props.idToken)
         let inputs = []
         for (let key in this.state.dataControls) {
             const input = <Input key={key}
@@ -121,15 +121,25 @@ class Auth extends React.Component {
                 </Button>
             </div>
         </form>)
-
+        
         if (this.props.loading) {
             form = <Spinner />
         }
+        let error = null;
+        if (this.props.error){
+            error = (
+                <p>
+                    {this.props.error.message}
+                </p>
+            )
+        }
+
         return (<div className={classes.Auth}>
             <h3>
                 {this.state.isSignUp ? 'SignUP' : 'Login'}
                 <hr />
             </h3>
+            {error}
             {form}
         
         </div>)
@@ -139,7 +149,8 @@ class Auth extends React.Component {
 const mapStateToProps = state =>{
 
     return {
-        idToken:state.auth.idToken
+        loading:state.auth.loading,
+        error:state.auth.error
     }
 }
 

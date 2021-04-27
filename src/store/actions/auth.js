@@ -26,9 +26,8 @@ const authFail = (error)=>{
 }
 
 export const auth = (email,password,isSignUp)=>{
-    console.log(isSignUp)
     return dispatch =>{
-        dispatch(authStart)
+        dispatch(authStart())
         const data  = {
             email:email,
             password:password,
@@ -44,8 +43,7 @@ export const auth = (email,password,isSignUp)=>{
                         dispatch(authSuccess(res.data.idToken,res.data.localId))
                     }
                 ).catch(err =>{
-                    console.log(err)
-                    dispatch(authFail)
+                    dispatch(authFail(err.response.data.error))
                 })
     }
 }
