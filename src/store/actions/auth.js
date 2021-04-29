@@ -32,7 +32,6 @@ const logout = ()=>{
 }
 
 const checkAithTimeout = (expirationTime) =>{
-    console.log('iam here')
     return dispatch =>{
         setTimeout(() => {
             dispatch(logout()) 
