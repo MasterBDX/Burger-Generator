@@ -21,7 +21,13 @@ class BurgerBuilder extends Component {
     }
  
     purchaseHandler = () => {
-        this.setState({purchasing:true})
+        
+        if(this.props.isAuthenticated){
+           this.setState({purchasing:true});
+        }else{
+            this.props.getAuthRedirectPath('/checkout')
+            this.props.history.push('/auth');
+        }
     }
 
     purchaseCancelHandler = () => {
@@ -43,14 +49,13 @@ class BurgerBuilder extends Component {
 
     render(){
         const disabledInfo = {...this.props.ingredients}
-        
         let order = <OrderSummary 
                     totalPrice={this.props.totalPrice}
                     purchaseCancel={this.purchaseCancelHandler}
                     purchaseContinue={this.purchaseContinueHandler}
                     ingredients={this.props.ingredients} />
-        let burger = (
-                    <Aux>
+
+        let burger = (<Aux>
                         <Burger ingredients={this.props.ingredients} />
                         <BurgerControls
                             purchasing={this.purchaseHandler}
@@ -59,9 +64,9 @@ class BurgerBuilder extends Component {
                             disabledInfo = {disabledInfo}
                             addIngredient={this.props.addIngredient}
                             removeIngredient={this.props.removeIngredient}
-                        />
-                    </Aux>
-                    )
+                            isAuth={this.props.isAuthenticated} />
+                       </Aux> 
+                       )
         if (!this.props.ingredients && this.props.error){
             burger = ( <p style={{'textAlign':'center'}} >
             Error has been occurred can't fetch the ingredients
@@ -99,19 +104,19 @@ const mapStateToProps = (state) =>{
         ingredients:state.burgerBuilder.ingredients,
         totalPrice:state.burgerBuilder.totalPrice,
         defaultPrices:state.burgerBuilder.defaultPrices,
-        error:state.burgerBuilder.error
+        error:state.burgerBuilder.error,
+        isAuthenticated:state.auth.idToken !== null
+
     }
 }
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        addIngredient:(ingName) => {
-                                    dispatch(actions.addIngredient(ingName))
-                                        },
-        removeIngredient:(ingName) => {dispatch(actions.removeIngredient(ingName))
-                                        },
-        initIngredient:() => {dispatch(actions.initIngredients())},
-        initPurchaseBurger: ()=> { dispatch(actions.initPurchaseBurger()) }
+        addIngredient:(ingName) => dispatch(actions.addIngredient(ingName)),
+        removeIngredient:(ingName) => dispatch(actions.removeIngredient(ingName)),
+        initIngredient:() => dispatch(actions.initIngredients()),
+        initPurchaseBurger: ()=> dispatch(actions.initPurchaseBurger()) ,
+        getAuthRedirectPath:(path)=>dispatch(actions.getAuthRedirectPath(path))     
     }
 }
 

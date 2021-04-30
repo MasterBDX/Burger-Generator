@@ -27,7 +27,7 @@ const burgerControls = (props) => (
                     className={classes.OrderButton}
                     onClick={props.purchasing}
                     >
-                Order Now
+                {props.isAuth ? 'Order Now':'SignUp Now To Order'}
             </button>
         </div>
     </div>

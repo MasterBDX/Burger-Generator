@@ -12,7 +12,8 @@ const initialState = {
     ingredients: null,
     error:false,
     totalPrice: 0,
-    defaultPrices:IngredientsPrices
+    defaultPrices:IngredientsPrices,
+    building:false
 }
 
 const addIng = (state,action)=>{
@@ -20,7 +21,8 @@ const addIng = (state,action)=>{
     const updatedAddProps = updateObject(state,
                                 {
                                  ingredients:addIngsObj,
-                                 totalPrice: state.totalPrice + state.defaultPrices[action.ingName]
+                                 totalPrice: state.totalPrice + state.defaultPrices[action.ingName],
+                                 building:true
                                 })
     return updatedAddProps
 }
@@ -30,7 +32,8 @@ const removeIng = (state,action)=>{
     const updatedRemoveProps = updateObject(state,
                                 {
                                  ingredients:removeIngsObj,
-                                 totalPrice: state.totalPrice + state.defaultPrices[action.ingName]
+                                 totalPrice: state.totalPrice + state.defaultPrices[action.ingName],
+                                 building:true
                                 })
     return updatedRemoveProps
 }
@@ -38,14 +41,16 @@ const removeIng = (state,action)=>{
 
 const setIngs = (state,action)=>{
     const setUpdatedProps = { ingredients:action.ingredients,
-        error:false,
-        totalPrice:0}
+                                error:false,
+                                totalPrice:0,
+                            }
         const setUpdatedObj = updateObject(state,setUpdatedProps)
         return setUpdatedObj
 }
 
 const fetchIngsFailed = (state,action)=>{
-    return updateObject(state,{error:true})
+    return updateObject(state,{error:true,
+                               building:false})
 } 
 
 const reducer = (state = initialState, action) => {

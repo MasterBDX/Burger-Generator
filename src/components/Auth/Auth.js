@@ -5,7 +5,7 @@ import Spinner from '../UI/Spinner/Spinner';
 import Input from '../UI/Input/Input';
 import classes from './Auth.module.css';
 import { connect } from 'react-redux';
-
+import {Redirect} from 'react-router-dom';
 
 import * as actionsCreators from '../../store/index';
 
@@ -110,14 +110,13 @@ class Auth extends React.Component {
             {inputs}
             <Button btnType="Success"
                 disabled={!this.state.formIsValid} >
-                {this.state.isSignUp ? 'Sign Up' : 'Login'}
+                {this.state.isSignUp ? 'Sign Up' : 'Sign In'}
             </Button>
 
             <div>
                 <Button btnType="Danger"
-                    clicked={this.switchAuthModeHandler}
-                >
-                    Switch to {this.state.isSignUp ? 'Login' : 'Sign Up'}
+                    clicked={this.switchAuthModeHandler}>
+                    Switch to {this.state.isSignUp ? 'Sign In' : 'Sign Up'}
                 </Button>
             </div>
         </form>)
@@ -133,8 +132,12 @@ class Auth extends React.Component {
                 </p>
             )
         }
-
+        let authRedirect = null
+        if (this.props.isAuthenticated){
+            authRedirect = <Redirect to={this.props.redirectPath} />
+        }
         return (<div className={classes.Auth}>
+            {authRedirect}
             <h3>
                 {this.state.isSignUp ? 'SignUP' : 'Login'}
                 <hr />
@@ -144,19 +147,29 @@ class Auth extends React.Component {
         
         </div>)
     }
+    componentDidMount(){
+        if (!this.props.building){
+            this.props.getAuthRedirectPath('/');
+        }
+    }
 }
 
 const mapStateToProps = state =>{
 
     return {
         loading:state.auth.loading,
-        error:state.auth.error
+        error:state.auth.error,
+        isAuthenticated:state.auth.idToken,
+        redirectPath:state.auth.redirectPath,
+        building:state.burgerBuilder.building,
+
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        authCallBack: (email, password,isSignUp) => dispatch(actionsCreators.auth(email, password,isSignUp))
+        authCallBack: (email, password,isSignUp) => dispatch(actionsCreators.auth(email, password,isSignUp)),
+        getAuthRedirectPath:(path) =>{actionsCreators.getAuthRedirectPath(path)}
     }
 }
 

@@ -25,7 +25,7 @@ const authFail = (error)=>{
     
 }
 
-const logout = ()=>{
+export const logout = ()=>{
     return {
         type:actionsTypes.AUTH_LOGOUT
     }
@@ -53,8 +53,7 @@ export const auth = (email,password,isSignUp)=>{
             url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBPC7rko3GMmlU72t3cTrgXl6SymC2U9GI'
         }
         axios.post(url,
-                   data).then(res => {
-                    console.log(res.data)    
+                   data).then(res => {    
                         dispatch(authSuccess(res.data.idToken,res.data.localId))
                         if (!isSignUp){
                             dispatch(checkAithTimeout(res.data.expiresIn))
@@ -66,4 +65,10 @@ export const auth = (email,password,isSignUp)=>{
     }
 }
 
+export const getAuthRedirectPath = (path)=>{
+    return {
+        type:actionsTypes.AUTH_REDIRECT_PATH,
+        path:path
+    }
+} 
  
