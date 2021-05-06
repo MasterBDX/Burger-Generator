@@ -28,11 +28,11 @@ const addIng = (state,action)=>{
 }
 
 const removeIng = (state,action)=>{
-    const removeIngsObj = updateObject(state.ingredients,{[action.ingName]: state.ingredients[action.ingName] + 1})
+    const removeIngsObj = updateObject(state.ingredients,{[action.ingName]: state.ingredients[action.ingName] - 1})
     const updatedRemoveProps = updateObject(state,
                                 {
                                  ingredients:removeIngsObj,
-                                 totalPrice: state.totalPrice + state.defaultPrices[action.ingName],
+                                 totalPrice: state.totalPrice - state.defaultPrices[action.ingName],
                                  building:true
                                 })
     return updatedRemoveProps
