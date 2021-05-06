@@ -11,7 +11,8 @@ class Orders extends Component{
 
     componentDidMount(){
         
-        this.props.ordersFetch(this.props.token)
+        this.props.ordersFetch(this.props.token,
+                               this.props.localId)
 
     }
     
@@ -33,16 +34,18 @@ class Orders extends Component{
 
 
 const mapStateToProps = state =>{
+    
     return {
         orders:state.order.orders,
         loading:state.order.loading,
-        token:state.auth.idToken
+        token:state.auth.idToken,
+        localId:state.auth.localId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        ordersFetch: (token) => dispatch(actions.ordersFetch(token))
+        ordersFetch: (token,localId) => dispatch(actions.ordersFetch(token,localId))
     }
 }
 

@@ -20,8 +20,7 @@ class BurgerBuilder extends Component {
         purchasing:false,
     }
  
-    purchaseHandler = () => {
-        
+    purchaseHandler = () => {        
         if(this.props.isAuthenticated){
            this.setState({purchasing:true});
         }else{

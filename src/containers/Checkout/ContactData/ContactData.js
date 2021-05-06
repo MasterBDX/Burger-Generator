@@ -78,21 +78,6 @@ class ContactData extends Component {
         loading: false
     }
 
-    sendOrderHandler = (event) => {
-        event.preventDefault();
-        this.setState({ loading: true })
-        const formData = {};
-        for (let identifier in this.state.contactData) {
-            formData[identifier] = this.state.contactData[identifier].value
-        }
-        const order = {
-            ingredients: this.props.ingredients,
-            totalPrice: this.props.totalPrice,
-            customer: formData
-        }
-        this.props.burgerPurchase(order,this.props.token)
-    }
-
     inputChangeHandler = (event, identifier) => {
         const clonedData = { ...this.state.contactData };
         const clonedDeepData = { ...clonedData[identifier] };
@@ -118,7 +103,24 @@ class ContactData extends Component {
         }
         return isValid
     }
+    
+    sendOrderHandler = (event) => {
+        event.preventDefault();
+        this.setState({ loading: true })
+        const formData = {};
+        for (let identifier in this.state.contactData) {
+            formData[identifier] = this.state.contactData[identifier].value
+        }
+        
+        const order = {
+            ingredients: this.props.ingredients,
+            totalPrice: this.props.totalPrice,
+            customer: formData,
+            userId:this.props.localId
 
+        }
+        this.props.burgerPurchase(order,this.props.token)
+    }
     render() {
         let inputs = []
         for (let key in this.state.contactData) {
@@ -155,12 +157,12 @@ class ContactData extends Component {
 }
 
 const mapStateToProps = (state) => {
-
     return {
         ingredients: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
         loading: state.order.loading,
-        token:state.auth.idToken
+        token:state.auth.idToken,
+        localId : state.auth.localId
     }
 }
 
