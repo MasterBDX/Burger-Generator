@@ -23,6 +23,7 @@ const purchaseBurgerFail = (error) =>{
 export const startPurchaseBurger = () =>{
     return {
         type:actionsTypes.PURCHASE_BURGER_START
+        
     }
 }
 
