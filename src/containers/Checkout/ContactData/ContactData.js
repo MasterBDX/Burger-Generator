@@ -3,26 +3,13 @@ import axios from '../../../axios/axios-orders';
 import classes from './ContactData.module.css';
 import { connect } from 'react-redux';
 import errorHandler from '../../../hoc/WithErrorHandler/WithErrorHandler';
-
+import updateObject from '../../../utils/utility';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import * as orderActions from '../../../store/index';
+import {inputGenerator,checkValidity} from '../../../utils/utility';
 
-const inputGenerator = (inputtype, config, validators, value) => {
-    let valid = false
-    if (inputtype === 'select') {
-        valid = true;
-    }
-    return {
-        inputtype: inputtype,
-        config: config,
-        value: value,
-        validators: validators,
-        valid: valid,
-        touched: false
-    }
-}
 
 class ContactData extends Component {
     state = {
@@ -78,14 +65,17 @@ class ContactData extends Component {
         loading: false
     }
 
-    inputChangeHandler = (event, identifier) => {
-        const clonedData = { ...this.state.contactData };
-        const clonedDeepData = { ...clonedData[identifier] };
-        clonedDeepData.value = event.target.value;
-        clonedDeepData.valid = this.checkValidity(event.target.value,
-            clonedDeepData.validators)
-        clonedDeepData.touched = true;
-        clonedData[identifier] = clonedDeepData;
+    inputChangeHandler = (event, identifier) => {        
+        const clonedDeepData = updateObject(this.state.contactData[identifier],
+                                {
+                                    value:  event.target.value,
+                                    valid: checkValidity(event.target.value,
+                                        this.state.contactData[identifier].validators),
+                                    touched:true,
+                                })
+        
+        const clonedData = updateObject(this.state.contactData,{[identifier] : clonedDeepData})
+        
         let formIsValid = true;
         for (let inputIdentifier in clonedData) {
             formIsValid = clonedData[inputIdentifier].valid && formIsValid
@@ -93,16 +83,7 @@ class ContactData extends Component {
         this.setState({ contactData: clonedData, formIsValid: formIsValid });
     }
 
-    checkValidity(value, rules) {
-        let isValid = true
-        if (rules.required) {
-            isValid = value !== '' && isValid;
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid
-        }
-        return isValid
-    }
+   
     
     sendOrderHandler = (event) => {
         event.preventDefault();

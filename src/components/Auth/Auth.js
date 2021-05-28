@@ -6,23 +6,10 @@ import Input from '../UI/Input/Input';
 import classes from './Auth.module.css';
 import { connect } from 'react-redux';
 import {Redirect} from 'react-router-dom';
-
+import updateObject from '../../utils/utility';
 import * as actionsCreators from '../../store/index';
+import {inputGenerator,checkValidity} from '../../utils/utility';
 
-const inputGenerator = (inputtype, config, validators, value) => {
-    let valid = false
-    if (inputtype === 'select') {
-        valid = true;
-    }
-    return {
-        inputtype: inputtype,
-        config: config,
-        value: value,
-        validators: validators,
-        valid: valid,
-        touched: false
-    }
-}
 
 class Auth extends React.Component {
     state = {
@@ -57,13 +44,18 @@ class Auth extends React.Component {
     }
 
     inputChangeHandler = (event, identifier) => {
-        const clonedData = { ...this.state.dataControls };
-        const clonedDeepData = { ...clonedData[identifier] };
-        clonedDeepData.value = event.target.value;
-        clonedDeepData.valid = this.checkValidity(event.target.value,
-            clonedDeepData.validators)
-        clonedDeepData.touched = true;
-        clonedData[identifier] = clonedDeepData;
+
+        const clonedDeepData = updateObject(this.state.dataControls[identifier],{
+            value : event.target.value,
+            valid:checkValidity(event.target.value,
+                this.state.dataControls[identifier].validators),
+            touched:true,
+
+        })
+        const clonedData = updateObject(this.state.dataControls,{
+            [identifier] : clonedDeepData
+        })
+        
         let formIsValid = true;
         for (let inputIdentifier in clonedData) {
             formIsValid = clonedData[inputIdentifier].valid && formIsValid
@@ -71,16 +63,7 @@ class Auth extends React.Component {
         this.setState({ dataControls: clonedData, formIsValid: formIsValid });
     }
 
-    checkValidity(value, rules) {
-        let isValid = true
-        if (rules.required) {
-            isValid = value !== '' && isValid;
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid
-        }
-        return isValid
-    }
+
 
     switchAuthModeHandler = (event) => {
         event.preventDefault();

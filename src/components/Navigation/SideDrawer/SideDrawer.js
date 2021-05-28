@@ -18,13 +18,12 @@ const sideDrawer = (props) => {
                       puchaseCancel={props.sideDrwerhandler} />
             
             <div className={attechmentClasses.join(' ')}
-                 onClick={props.sideDrwerhandler}
-            >
+                 onClick={props.sideDrwerhandler} >
                 <div className={classes.Logo}>
                     <Logo />
                 </div>
                 <nav>
-                    <NavigationItems />
+                   <NavigationItems />
                 </nav>
             </div>
         </Aux>
