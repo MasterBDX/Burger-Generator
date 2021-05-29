@@ -5,7 +5,7 @@ import Aux from '../../../hoc/Auxiliary/Aux';
 
 class OrderSummary extends Component{
     componentDidUpdate(){
-        console.log('Component will Update ')
+        
     }
     
     render(){
